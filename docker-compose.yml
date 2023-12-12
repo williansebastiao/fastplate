@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: .
+        image: fastplate/python:3.10
+        container_name: fastplate-app
+        restart: unless-stopped
+        ports:
+            - "${APP_PORT:-8000}:8000"
+        volumes:
+            - .:/code
+        networks:
+            - fastplate
+    db:
+        image: mysql:8.0.33
+        container_name: fastplate-db
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: '12345678'
+            MYSQL_DATABASE: 'fastplate'
+            MYSQL_USER: 'fastplate'
+            MYSQL_PASSWORD: '123456'
+        volumes:
+            - .database:/var/lib/mysql
+        ports:
+            - "${DB_PORT:-3307}:3306"
+        expose:
+            - 3307
+        depends_on:
+            - app
+        networks:
+            - fastplate
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: fastplate-phpmyadmin
+        restart: unless-stopped
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_PMADB: fastplate
+        ports:
+        - "${APP_PORT:-8001}:80"
+        depends_on:
+            - db
+        networks:
+            - fastplate
+
+networks:
+    fastplate:
+        driver: bridge
