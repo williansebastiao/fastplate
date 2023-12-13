@@ -27,7 +27,7 @@ migration: ## Make migration
 	poetry run alembic revision -m "$(m)"
 
 migrate: ## Make migration
-	$(DOCKER_COMPOSE) exec app alembic upgrade head
+	$(DOCKER_COMPOSE) exec app doppler run -- alembic upgrade head
 
 seed: ## Run seeder
 	$(DOCKER_COMPOSE) exec app doppler run -- php artisan db:seed

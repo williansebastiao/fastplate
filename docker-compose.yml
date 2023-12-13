@@ -5,6 +5,8 @@ services:
             context: .
         image: fastplate/python:3.10
         container_name: fastplate-app
+        environment:
+            DOPPLER_TOKEN: ${TOKEN}
         restart: unless-stopped
         ports:
             - "${APP_PORT:-8000}:8000"
