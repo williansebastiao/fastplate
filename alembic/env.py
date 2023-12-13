@@ -1,13 +1,16 @@
+import os
 from logging.config import fileConfig
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
+from dotenv import load_dotenv
 
+load_dotenv()
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+config.set_main_option('sqlalchemy.url', f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -38,6 +41,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
