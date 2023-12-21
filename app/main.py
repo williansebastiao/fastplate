@@ -27,3 +27,8 @@ def find_movie_by_id(id):
 def store_movies(data: MovieSchema):
     movie = MovieController()
     return movie.store(data)
+
+@app.delete('/api/movies/destroy/{id}')
+def destroy_movies(id):
+    movie = MovieController()
+    return movie.destroy(id)

@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.config.database import engine
@@ -38,4 +39,11 @@ class MovieController:
             return movie
 
     def destroy(self, id):
-        ...
+        with Session(engine) as session:
+            movie = session.query(Movie).filter(Movie.id == id).first()
+
+            if movie:
+                movie.deleted_at = datetime.now()
+                session.commit()
+
+            return {'message': 'salvo'}
